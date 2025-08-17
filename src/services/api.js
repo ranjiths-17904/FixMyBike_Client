@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const resolvedBaseUrl = 'https://fixmybike-server.onrender.com';
+const resolvedBaseUrl = 'https://fixmybike-server.onrender.com/api';
 
 
 const api = axios.create({
