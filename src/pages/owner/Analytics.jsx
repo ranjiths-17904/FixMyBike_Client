@@ -49,8 +49,8 @@ const Analytics = () => {
       
       // Fetch real data from API
       const [bookingsResponse, revenueResponse] = await Promise.all([
-        api.get('/bookings/analytics', { params: { timeFilter } }),
-        api.get('/bookings/revenue', { params: { timeFilter } })
+        api.get('/api/bookings/analytics', { params: { timeFilter } }),
+        api.get('/api/bookings/revenue', { params: { timeFilter } })
       ]);
 
       const bookingsData = bookingsResponse.data;

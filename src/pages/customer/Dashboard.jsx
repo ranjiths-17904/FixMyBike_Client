@@ -30,7 +30,7 @@ const CustomerDashboard = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await api.get('/bookings');
+      const response = await api.get('/api/bookings');
       
       if (response.data.success) {
         const bookingsData = response.data.bookings;

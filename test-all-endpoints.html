@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixMyBike - Complete API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: #28a745; font-weight: bold; }
+        .error { color: #dc3545; font-weight: bold; }
+        .info { color: #17a2b8; }
+        .warning { color: #ffc107; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .endpoint-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        .endpoint-card h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .endpoint-card .status {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .endpoint-card .url {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .summary {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 FixMyBike - Complete API Endpoint Test</h1>
+    
+    <div class="test-section">
+        <h2>Server Information</h2>
+        <p><strong>Server URL:</strong> <span id="serverUrl">https://fixmybike-server.onrender.com</span></p>
+        <p><strong>Client URL:</strong> <span id="clientUrl">fixmybike.netlify.app</span></p>
+        <p><strong>Test Time:</strong> <span id="testTime"></span></p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Controls</h2>
+        <button onclick="testAllEndpoints()">🧪 Test All Endpoints</button>
+        <button onclick="testAuthEndpoints()">🔐 Test Auth Endpoints</button>
+        <button onclick="testServiceEndpoints()">⚙️ Test Service Endpoints</button>
+        <button onclick="clearResults()">🗑️ Clear Results</button>
+        <button onclick="exportResults()">📊 Export Results</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results Summary</h2>
+        <div class="summary">
+            <div id="summary"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Endpoint Test Results</h2>
+        <div class="endpoint-grid" id="endpointGrid"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Detailed Logs</h2>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        const serverUrl = 'https://fixmybike-server.onrender.com';
+        const results = {};
+        let testCount = 0;
+        let successCount = 0;
+        let failureCount = 0;
+
+        // Initialize test time
+        document.getElementById('testTime').textContent = new Date().toLocaleString();
+
+        // Define all endpoints to test
+        const endpoints = [
+            // Basic endpoints
+            { path: '/', method: 'GET', name: 'Root Endpoint', description: 'Server status and available endpoints' },
+            { path: '/api/health', method: 'GET', name: 'Health Check', description: 'Server health status' },
+            { path: '/api/test', method: 'GET', name: 'Test Endpoint', description: 'Basic functionality test' },
+            
+            // Auth endpoints
+            { path: '/api/auth/login', method: 'POST', name: 'Login', description: 'User authentication', body: { emailOrUser: 'test@test.com', password: 'test123' } },
+            { path: '/api/auth/signup', method: 'POST', name: 'Signup', description: 'User registration', body: { email: 'test@test.com', username: 'testuser', password: 'test123' } },
+            { path: '/api/auth/me', method: 'GET', name: 'Get User', description: 'Get current user info', requiresAuth: true },
+            { path: '/api/auth/check-availability', method: 'POST', name: 'Check Availability', description: 'Check username/email availability', body: { field: 'username', value: 'testuser' } },
+            
+            // Service endpoints
+            { path: '/api/bookings', method: 'GET', name: 'Get Bookings', description: 'Fetch user bookings', requiresAuth: true },
+            { path: '/api/bookings', method: 'POST', name: 'Create Booking', description: 'Create new booking', body: { serviceId: 'test', date: '2024-12-25' }, requiresAuth: true },
+            { path: '/api/users', method: 'GET', name: 'Get Users', description: 'Fetch users list', requiresAuth: true },
+            { path: '/api/notifications', method: 'GET', name: 'Get Notifications', description: 'Fetch user notifications', requiresAuth: true },
+            { path: '/api/payments', method: 'GET', name: 'Get Payments', description: 'Fetch payment history', requiresAuth: true }
+        ];
+
+        function createEndpointCard(endpoint) {
+            const card = document.createElement('div');
+            card.className = 'endpoint-card';
+            card.id = `endpoint-${endpoint.path.replace(/[^a-zA-Z0-9]/g, '-')}`;
+            
+            card.innerHTML = `
+                <h4>${endpoint.name}</h4>
+                <div class="status" id="status-${endpoint.path.replace(/[^a-zA-Z0-9]/g, '-')}">⏳ Pending</div>
+                <div class="url">${endpoint.method} ${endpoint.path}</div>
+                <p>${endpoint.description}</p>
+                <div class="result" id="result-${endpoint.path.replace(/[^a-zA-Z0-9]/g, '-')}"></div>
+            `;
+            
+            return card;
+        }
+
+        function initializeEndpointGrid() {
+            const grid = document.getElementById('endpointGrid');
+            grid.innerHTML = '';
+            
+            endpoints.forEach(endpoint => {
+                grid.appendChild(createEndpointCard(endpoint));
+            });
+        }
+
+        function updateEndpointStatus(path, status, message, details = null) {
+            const pathId = path.replace(/[^a-zA-Z0-9]/g, '-');
+            const statusElement = document.getElementById(`status-${pathId}`);
+            const resultElement = document.getElementById(`result-${pathId}`);
+            
+            if (statusElement) {
+                statusElement.textContent = message;
+                statusElement.className = status;
+            }
+            
+            if (resultElement && details) {
+                resultElement.innerHTML = `<pre>${JSON.stringify(details, null, 2)}</pre>`;
+            }
+            
+            // Update results object
+            results[path] = { status, message, details, timestamp: new Date().toISOString() };
+        }
+
+        function addLog(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function updateSummary() {
+            const summaryDiv = document.getElementById('summary');
+            summaryDiv.innerHTML = `
+                <strong>Total Tests:</strong> ${testCount} | 
+                <strong>Successful:</strong> <span class="success">${successCount}</span> | 
+                <strong>Failed:</strong> <span class="error">${failureCount}</span> | 
+                <strong>Success Rate:</strong> ${testCount > 0 ? Math.round((successCount / testCount) * 100) : 0}%
+            `;
+        }
+
+        async function testEndpoint(endpoint) {
+            const { path, method, name, body, requiresAuth } = endpoint;
+            
+            try {
+                addLog(`Testing ${name} (${method} ${path})...`, 'info');
+                
+                const config = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                if (body) {
+                    config.body = JSON.stringify(body);
+                }
+                
+                if (requiresAuth) {
+                    // Skip auth-required endpoints for now
+                    updateEndpointStatus(path, 'warning', '⚠️ Requires Authentication');
+                    addLog(`Skipped ${name} - requires authentication`, 'warning');
+                    return;
+                }
+                
+                const response = await fetch(`${serverUrl}${path}`, config);
+                const data = await response.json();
+                
+                testCount++;
+                
+                if (response.ok) {
+                    successCount++;
+                    updateEndpointStatus(path, 'success', `✅ Success (${response.status})`);
+                    addLog(`✅ ${name}: SUCCESS (${response.status})`, 'success');
+                } else {
+                    failureCount++;
+                    updateEndpointStatus(path, 'error', `❌ Failed (${response.status})`);
+                    addLog(`❌ ${name}: FAILED (${response.status}) - ${data.message || 'Unknown error'}`, 'error');
+                }
+                
+                updateEndpointStatus(path, response.ok ? 'success' : 'error', '', data);
+                
+            } catch (error) {
+                testCount++;
+                failureCount++;
+                updateEndpointStatus(path, 'error', `❌ Error`);
+                addLog(`❌ ${name}: ERROR - ${error.message}`, 'error');
+            }
+            
+            updateSummary();
+        }
+
+        async function testAllEndpoints() {
+            addLog('🚀 Starting comprehensive endpoint test...', 'info');
+            clearResults();
+            initializeEndpointGrid();
+            
+            for (const endpoint of endpoints) {
+                await testEndpoint(endpoint);
+                // Small delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            addLog('🏁 All endpoint tests completed!', 'info');
+        }
+
+        async function testAuthEndpoints() {
+            addLog('🔐 Testing authentication endpoints...', 'info');
+            const authEndpoints = endpoints.filter(e => e.path.includes('/auth'));
+            
+            for (const endpoint of authEndpoints) {
+                await testEndpoint(endpoint);
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+
+        async function testServiceEndpoints() {
+            addLog('⚙️ Testing service endpoints...', 'info');
+            const serviceEndpoints = endpoints.filter(e => !e.path.includes('/auth') && e.path !== '/' && e.path !== '/api/health' && e.path !== '/api/test');
+            
+            for (const endpoint of serviceEndpoints) {
+                await testEndpoint(endpoint);
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+
+        function clearResults() {
+            testCount = 0;
+            successCount = 0;
+            failureCount = 0;
+            results = {};
+            document.getElementById('logs').innerHTML = '';
+            updateSummary();
+        }
+
+        function exportResults() {
+            const dataStr = JSON.stringify(results, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `fixmybike-api-test-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialize the page
+        window.onload = function() {
+            initializeEndpointGrid();
+            updateSummary();
+            addLog('📱 Test page loaded. Click "Test All Endpoints" to begin comprehensive testing.', 'info');
+        };
+    </script>
+</body>
+</html>

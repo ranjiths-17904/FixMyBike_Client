@@ -20,41 +20,20 @@ export const NotificationProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const fetchNotifications = async () => {
-    if (!user) return;
-    
     try {
-      setLoading(true);
-      const response = await api.get('/notifications');
-      
-      if (response.data.success) {
-        setNotifications(response.data.notifications);
-      }
+      const response = await api.get('/api/notifications');
+      setNotifications(response.data.notifications || []);
     } catch (error) {
       console.error('Error fetching notifications:', error);
-      // For testing purposes, create mock notifications if API fails
-      if (error.response?.status === 404) {
-        createMockNotifications();
-      }
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchUnreadCount = async () => {
-    if (!user) return;
-    
     try {
-      const response = await api.get('/notifications/unread-count');
-      
-      if (response.data.success) {
-        setUnreadCount(response.data.count);
-      }
+      const response = await api.get('/api/notifications/unread-count');
+      setUnreadCount(response.data.count || 0);
     } catch (error) {
       console.error('Error fetching unread count:', error);
-      // For testing purposes, calculate from local notifications
-      if (notifications.length > 0) {
-        setUnreadCount(notifications.filter(n => !n.isRead).length);
-      }
     }
   };
 
@@ -121,26 +100,15 @@ export const NotificationProvider = ({ children }) => {
 
   const createNotification = async (notificationData) => {
     try {
-      const response = await api.post('/notifications', notificationData);
-      
+      const response = await api.post('/api/notifications', notificationData);
       if (response.data.success) {
-        // Refresh notifications
-        fetchNotifications();
-        fetchUnreadCount();
-        return response.data.notification;
+        // Refresh notifications after creating new one
+        await fetchNotifications();
+        return { success: true };
       }
     } catch (error) {
       console.error('Error creating notification:', error);
-      // For testing purposes, create locally
-      const newNotification = {
-        _id: Date.now().toString(),
-        ...notificationData,
-        isRead: false,
-        createdAt: new Date().toISOString()
-      };
-      setNotifications(prev => [newNotification, ...prev]);
-      setUnreadCount(prev => prev + 1);
-      return newNotification;
+      return { success: false, message: error.message };
     }
   };
 

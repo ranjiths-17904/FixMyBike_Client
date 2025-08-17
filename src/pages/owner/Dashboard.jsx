@@ -35,8 +35,8 @@ const OwnerDashboard = () => {
       
       // Fetch both bookings and dashboard stats in parallel
       const [bookingsResponse, statsResponse] = await Promise.all([
-        api.get('/bookings'),
-        api.get('/bookings/stats/dashboard')
+        api.get('/api/bookings'),
+        api.get('/api/bookings/stats/dashboard')
       ]);
       
       if (bookingsResponse.data.success) {

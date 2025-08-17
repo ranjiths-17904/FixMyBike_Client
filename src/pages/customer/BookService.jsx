@@ -38,7 +38,7 @@ const BookService = () => {
           urgency: formData.urgency,
           cost: selectedService.price
         };
-        return api.post('/bookings', bookingData);
+        return api.post('/api/bookings', bookingData);
       });
 
       await Promise.all(bookingPromises);

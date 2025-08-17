@@ -35,7 +35,7 @@ const CustomerProfile = () => {
 
   const fetchBookingStats = async () => {
     try {
-      const response = await api.get('/bookings');
+      const response = await api.get('/api/bookings');
       if (response.data.success) {
         const bookings = response.data.bookings;
         const total = bookings.length;

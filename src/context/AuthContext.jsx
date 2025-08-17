@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await api.get('/auth/me');
+      const response = await api.get('/api/auth/me');
       if (response.data.success) {
         setUser(response.data.user);
       } else {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAvailability = async (field, value) => {
     try {
-      const response = await api.post('/auth/check-availability', { field, value });
+      const response = await api.post('/api/auth/check-availability', { field, value });
       return response.data.available;
     } catch (error) {
       return false;
@@ -52,14 +52,14 @@ export const AuthProvider = ({ children }) => {
 
   const sendOTP = async (email, username, phone) => {
     try {
-      const response = await api.post('/auth/send-otp', { email, username, phone });
+      const response = await api.post('/api/auth/send-otp', { email, username, phone });
       
       if (response.data.success) {
         toast.success('Verification code sent to your email!');
         if (response.data.previewUrl) {
           toast((t) => (
             <span>
-              OTP email preview: <a href={response.data.previewUrl} target="_blank" rel="noreferrer" className="text-green-600 underline">Open</a>
+              OTP email preview: <a href={response.data.previewUrl} target="_blank" rel="noopener noreferrer" className="text-green-600 underline">Open</a>
             </span>
           ));
         }
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyOTP = async (tempUserId, otp, password) => {
     try {
-      const response = await api.post('/auth/verify-otp', { tempUserId, otp, password });
+      const response = await api.post('/api/auth/verify-otp', { tempUserId, otp, password });
       
       if (response.data.success) {
         const { token, user: newUser } = response.data;
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
   const resendOTP = async (tempUserId) => {
     try {
-      const response = await api.post('/auth/resend-otp', { tempUserId });
+      const response = await api.post('/api/auth/resend-otp', { tempUserId });
       
       if (response.data.success) {
         toast.success('New verification code sent!');
@@ -107,14 +107,14 @@ export const AuthProvider = ({ children }) => {
 
   const sendForgotPasswordOTP = async (email) => {
     try {
-      const response = await api.post('/auth/forgot-password', { email });
+      const response = await api.post('/api/auth/forgot-password', { email });
       
       if (response.data.success) {
         toast.success('Password reset code sent to your email!');
         if (response.data.previewUrl) {
           toast((t) => (
             <span>
-              OTP email preview: <a href={response.data.previewUrl} target="_blank" rel="noreferrer" className="text-green-600 underline">Open</a>
+              OTP email preview: <a href={response.data.previewUrl} target="_blank" rel="noopener noreferrer" className="text-green-600 underline">Open</a>
             </span>
           ));
         }
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetPasswordWithOTP = async (userId, otp, newPassword) => {
     try {
-      const response = await api.post('/auth/reset-password', { userId, otp, newPassword });
+      const response = await api.post('/api/auth/reset-password', { userId, otp, newPassword });
       
       if (response.data.success) {
         toast.success('Password reset successfully!');
@@ -137,14 +137,13 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       const message = error.response?.data?.message || 'Failed to reset password';
-      toast.error(message);
       throw new Error(message);
     }
   };
 
   const signup = async (userData) => {
     try {
-      const response = await api.post('/auth/signup', userData);
+      const response = await api.post('/api/auth/signup', userData);
       
       if (response.data.success) {
         const { token, user: newUser } = response.data;
@@ -162,7 +161,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (emailOrUser, password) => {
     try {
-      const response = await api.post('/auth/login', {
+      const response = await api.post('/api/auth/login', {
         emailOrUser: emailOrUser,
         password: password,
       });
@@ -206,7 +205,7 @@ export const AuthProvider = ({ children }) => {
       Object.keys(payload).forEach((k) => payload[k] === undefined && delete payload[k]);
       if (Object.keys(profile).length) payload.profile = profile;
 
-      const response = await api.put('/auth/profile', payload);
+      const response = await api.put('/api/auth/profile', payload);
       
       if (response.data.success) {
         setUser(response.data.user);
