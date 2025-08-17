@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const resolvedBaseUrl = 'https://fixmybike-server.onrender.com/api';
+const resolvedBaseUrl = 'https://fixmybike-server.onrender.com';
 
 
 const api = axios.create({
@@ -38,7 +38,7 @@ api.interceptors.response.use(
         case 401:
           // Unauthorized - clear token and redirect to login
           localStorage.removeItem('token');
-          window.location.href = '/login';
+          window.location.href = 'api/login';
           toast.error('Session expired. Please login again.');
           break;
         case 403:
