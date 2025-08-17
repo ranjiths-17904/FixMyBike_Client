@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const resolvedBaseUrl = 'https://fixmybike-server.onrender.com/api';
+const resolvedBaseUrl = 'https://fixmybike-server.onrender.com';
 
 
 const api = axios.create({
@@ -30,6 +30,16 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    // Enhanced error logging for debugging
+    console.error('API Error:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      message: error.message
+    });
+
     if (error.response) {
       // Server responded with error status
       const { status, data } = error.response;
@@ -38,17 +48,17 @@ api.interceptors.response.use(
         case 401:
           // Unauthorized - clear token and redirect to login
           localStorage.removeItem('token');
-          window.location.href = 'api/login';
+          window.location.href = '/login';
           toast.error('Session expired. Please login again.');
           break;
         case 403:
           toast.error('Access denied. You do not have permission for this action.');
           break;
         case 404:
-          toast.error('Resource not found.');
+          toast.error('Resource not found. Please check the URL.');
           break;
         case 500:
-        
+          toast.error('Server error. Please try again later.');
           break;
         default:
           toast.error(data?.message || 'An error occurred. Please try again.');
