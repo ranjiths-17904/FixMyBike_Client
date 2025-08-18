@@ -39,7 +39,7 @@ export const NotificationProvider = ({ children }) => {
 
   const markAsRead = async (notificationId) => {
     try {
-      const response = await api.patch(`/notifications/${notificationId}/read`, {});
+      const response = await api.patch(`/api/notifications/${notificationId}/read`, {});
       
       if (response.data.success) {
         setNotifications(prev => 
@@ -67,7 +67,7 @@ export const NotificationProvider = ({ children }) => {
 
   const markAllAsRead = async () => {
     try {
-      const response = await api.patch('/notifications/read-all', {});
+      const response = await api.patch('/api/notifications/read-all', {});
       
       if (response.data.success) {
         setNotifications(prev => 

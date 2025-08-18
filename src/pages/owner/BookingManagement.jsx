@@ -60,22 +60,7 @@ const BookingManagement = () => {
           : booking
       ));
       
-      // Send notification to customer
-      const booking = bookings.find(b => b._id === bookingId);
-      if (booking) {
-        let notificationData = {
-          recipient: booking.customer,
-          sender: user?.id,
-          type: newStatus === 'confirmed' ? 'booking_confirmed' : 'booking_rejected',
-          title: newStatus === 'confirmed' ? 'Booking Confirmed' : 'Booking Rejected',
-          message: newStatus === 'confirmed' 
-            ? `Your ${booking.service} booking for ${booking.bikeModel} has been confirmed for ${booking.date} at ${booking.time}.`
-            : `Your ${booking.service} booking has been rejected. Reason: ${reason || 'No reason provided'}`,
-          booking: bookingId
-        };
-        
-        await createNotification(notificationData);
-      }
+      // Backend already creates notifications for status changes
       
       if (newStatus === 'rejected') {
         toast.success('Booking rejected successfully');

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 import logo from '../../assets/image/FixMyBike New Logo.png';
 
 import {
@@ -26,71 +27,40 @@ const ServiceHistory = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
-  // Mock data - replace with actual API calls
+  // Load real service history
   useEffect(() => {
-    setTimeout(() => {
-      setServiceHistory([
-        {
-          _id: '1',
-          serviceType: 'General Service',
-          bikeModel: 'Honda Activa',
-          bookingDate: '2024-01-10',
-          completionDate: '2024-01-12',
-          status: 'completed',
-          cost: 1200,
+    const loadHistory = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get('/api/bookings');
+        const bookings = (res.data?.bookings || []).filter(b => ['completed', 'delivered', 'picked-by-customer', 'service-done'].includes(b.status));
+        const mapped = bookings.map(b => ({
+          _id: b._id,
+          serviceType: b.serviceName || b.service,
+          bikeModel: b.bikeModel,
+          bookingDate: b.date,
+          completionDate: b.receipt?.completedAt || b.receipt?.pickedAt || b.updatedAt || b.date,
+          status: b.status,
+          cost: b.actualCost ?? b.cost ?? 0,
           workDone: {
-            workDescription:
-              'Complete engine oil change, air filter replacement, brake adjustment, and general inspection',
-            partsUsed: 'Engine oil (1L), Air filter, Brake pads',
-            laborHours: 2.5,
-            totalCost: 1200,
-            notes: 'Bike is in good condition. Recommended to change oil every 3000km.',
-            receipt: 'https://example.com/receipt1.pdf',
+            workDescription: Array.isArray(b.receipt?.workDone) ? b.receipt.workDone.join(', ') : '',
+            partsUsed: Array.isArray(b.receipt?.partsReplaced) ? b.receipt.partsReplaced.join(', ') : '',
+            laborHours: undefined,
+            totalCost: b.actualCost ?? b.cost ?? 0,
+            notes: b.receipt?.additionalNotes || '',
+            receipt: ''
           },
-          mechanic: 'Mani',
-          shopLocation: 'Downtown Service Center',
-        },
-        {
-          _id: '2',
-          serviceType: 'Brake Repair',
-          bikeModel: 'Yamaha FZ',
-          bookingDate: '2024-01-05',
-          completionDate: '2024-01-07',
-          status: 'completed',
-          cost: 800,
-          workDone: {
-            workDescription: 'Front brake pad replacement and brake fluid refill',
-            partsUsed: 'Front brake pads, Brake fluid (100ml)',
-            laborHours: 1.5,
-            totalCost: 800,
-            notes: 'Brakes are now responsive. Test ride completed successfully.',
-            receipt: 'https://example.com/receipt2.pdf',
-          },
-          mechanic: 'Rajesh Kumar',
-          shopLocation: 'Downtown Service Center',
-        },
-        {
-          _id: '3',
-          serviceType: 'Tyre Replacement',
-          bikeModel: 'Bajaj Pulsar',
-          bookingDate: '2024-01-01',
-          completionDate: '2024-01-02',
-          status: 'completed',
-          cost: 1500,
-          workDone: {
-            workDescription: 'Rear tyre replacement with tube',
-            partsUsed: 'Rear tyre (100/90-17), Tube',
-            laborHours: 1.0,
-            totalCost: 1500,
-            notes: 'New tyre provides better grip. Wheel alignment checked.',
-            receipt: 'https://example.com/receipt3.pdf',
-          },
-          mechanic: 'Vikram Sharma',
-          shopLocation: 'Downtown Service Center',
-        },
-      ]);
-      setLoading(false);
-    }, 1000);
+          mechanic: 'FixMyBike Service',
+          shopLocation: b.location === 'home' ? 'Home Service' : 'Service Center'
+        }));
+        setServiceHistory(mapped);
+      } catch (e) {
+        setServiceHistory([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadHistory();
   }, []);
 
   const handleViewDetails = (service) => {
