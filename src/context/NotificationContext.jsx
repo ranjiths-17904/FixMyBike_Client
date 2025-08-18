@@ -78,12 +78,7 @@ export const NotificationProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
-      // For testing purposes, update locally
-      setNotifications(prev => 
-        prev.map(notification => ({ ...notification, isRead: true }))
-      );
-      setUnreadCount(0);
-      toast.success('All notifications marked as read');
+      toast.error('Failed to mark all as read. Please try again.');
     }
   };
 
