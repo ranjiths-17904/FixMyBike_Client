@@ -48,7 +48,7 @@ const BookingManagement = () => {
   const handleStatusUpdate = async (bookingId, newStatus, reason = '') => {
     try {
       // Update booking status via API
-      const response = await api.put(`/bookings/${bookingId}/status`, {
+      const response = await api.put(`/api/bookings/${bookingId}/status`, {
         status: newStatus,
         reason: reason
       });
@@ -127,7 +127,7 @@ const BookingManagement = () => {
   const submitWorkDone = async () => {
     try {
       // Update booking status to completed via API
-      await api.put(`/bookings/${selectedBooking._id}/status`, {
+      await api.put(`/api/bookings/${selectedBooking._id}/status`, {
         status: 'completed',
         actualCost: workDoneData.totalCost || selectedBooking.cost
       });
@@ -168,7 +168,7 @@ const BookingManagement = () => {
     }
 
     try {
-      const response = await api.post(`/bookings/${bookingId}/send-receipt`, {
+      const response = await api.post(`/api/bookings/${bookingId}/send-receipt`, {
         workDone: workDoneData.workDescription ? [workDoneData.workDescription] : [],
         partsReplaced: workDoneData.partsUsed ? [workDoneData.partsUsed] : [],
         additionalNotes: workDoneData.notes || '',

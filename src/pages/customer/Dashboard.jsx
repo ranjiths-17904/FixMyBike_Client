@@ -81,7 +81,7 @@ const CustomerDashboard = () => {
     if (!bookingToDelete) return;
     
     try {
-      await api.delete(`/bookings/${bookingToDelete._id}`);
+      await api.delete(`/api/bookings/${bookingToDelete._id}`);
       
       toast.success('Booking deleted successfully!');
       setShowDeleteModal(false);

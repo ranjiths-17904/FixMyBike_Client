@@ -161,6 +161,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (emailOrUser, password) => {
     try {
+      console.log('Attempting login with:', { emailOrUser, hasPassword: !!password });
+      
       const response = await api.post('/api/auth/login', {
         emailOrUser: emailOrUser,
         password: password,
@@ -171,9 +173,15 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', token);
         setUser(user);
         toast.success('Login successful!');
+        console.log('Login successful for user:', user.username);
         return { success: true, user };
       }
     } catch (error) {
+      console.error('Login error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       const message = error.response?.data?.message || 'Login failed';
       toast.error(message);
       return { success: false, message };
@@ -219,6 +227,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const checkSession = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setUser(null);
+        return false;
+      }
+
+      const response = await api.get('/api/auth/me');
+      if (response.data.success) {
+        setUser(response.data.user);
+        return true;
+      } else {
+        localStorage.removeItem('token');
+        setUser(null);
+        return false;
+      }
+    } catch (error) {
+      console.error('Session check failed:', error);
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token');
+        setUser(null);
+        return false;
+      }
+      return false;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -232,6 +268,7 @@ export const AuthProvider = ({ children }) => {
     checkAvailability,
     logout,
     updateProfile,
+    checkSession,
   };
 
   return (
