@@ -97,7 +97,7 @@ const CustomerProfile = () => {
                 <FaArrowLeft className="w-5 h-5" />
               </button>
               <div className="flex items-center space-x-3">
-                <img src={MainLogo} alt="FixMyBike" className="h-8 w-8" />
+                <img src={MainLogo} alt="FixMyBike" className="h-12 w-12" />
                 <h1 className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                   Profile
                 </h1>
