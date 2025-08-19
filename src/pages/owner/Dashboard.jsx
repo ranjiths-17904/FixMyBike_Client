@@ -102,7 +102,7 @@ const OwnerDashboard = () => {
         <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-8 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold mb-2">
+              <h1 className="text-3xl font-bold mb-2">
                 Welcome back, {user?.username}! 🏪
               </h1>
               <p className="text-blue-100 text-lg">
