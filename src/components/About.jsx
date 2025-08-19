@@ -43,7 +43,7 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="min-h-5/6 bg-white px-6 py-0 text-gray-800 flex flex-col items-center mt-10">
+    <section id="about" className="min-h-5/6 bg-white px-6 py-0 text-gray-800 flex flex-col items-center mt-4">
       {/* Heading */}
       <h2 className="text-3xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-green-700 via-green-800 to-green-500 bg-clip-text text-transparent animate-none">
         About FixMyBike
@@ -101,14 +101,14 @@ export default function About() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto">
           {features.map(({ icon: Icon, title, subtitle }, index) => (
             <div
               key={index}
               className="bg-gradient-to-r from-green-500 via-green-400 to-green-600 rounded-xl p-6 flex flex-col items-center shadow-md hover:scale-105 transition-transform duration-200"
             >
               <div className="bg-white p-4 rounded-full mb-4 shadow-lg">
-                {Icon && <Icon className="h-10 w-10 text-green-900" />}
+                {Icon && <Icon className="h-8 w-10 text-green-900" />}
               </div>
               <p className="text-gray-600 text-lg font-semibold">{title}</p>
               <p className="text-yellow-100 text-sm font-medium">{subtitle}</p>

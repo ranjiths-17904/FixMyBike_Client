@@ -339,7 +339,7 @@ export default function Header({ onMenuClick }) {
 
       {/* Mobile Navigation Bar - Integrated into header */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-gradient-to-r from-green-600 via-emerald-600 to-teal-700 shadow-lg transition-all duration-300 ease-in-out w-full">
+        <div className="md:hidden bg-gradient-to-r from-green-600 via-emerald-600 to-teal-700 shadow-lg transition-all duration-300 ease-in-out w-80">
           <div className="w-full px-3 py-3">
             {/* Mobile Notifications Section */}
             {user && (

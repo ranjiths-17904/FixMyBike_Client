@@ -24,12 +24,12 @@ const ChatBot = () => {
   }, [messages]);
 
   const quickReplies = [
-    { text: 'Book a Service', icon: <Wrench className="h-4 w-4" /> },
-    { text: 'Service Prices', icon: <DollarSign className="h-4 w-4" /> },
-    { text: 'Find Shop Location', icon: <MapPin className="h-4 w-4" /> },
-    { text: 'Service Status', icon: <Clock className="h-4 w-4" /> },
-    { text: 'Contact Support', icon: <Phone className="h-4 w-4" /> },
-    { text: 'Our Services', icon: <Star className="h-4 w-4" /> }
+    { text: 'Book a Service', icon: <Wrench className="h-3 w-3" /> },
+    { text: 'Service Prices', icon: <DollarSign className="h-3 w-3" /> },
+    { text: 'Find Shop Location', icon: <MapPin className="h-3 w-3" /> },
+    // { text: 'Service Status', icon: <Clock className="h-3 w-3" /> },
+    { text: 'Contact Support', icon: <Phone className="h-3 w-3" /> },
+    // { text: 'Our Services', icon: <Star className="h-3 w-3" /> }
   ];
 
   const handleQuickReply = (reply) => {
