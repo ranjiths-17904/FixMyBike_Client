@@ -81,21 +81,21 @@ export default function Hero({ onBookService }) {
               <img
                 src={image}
                 alt="Green Bike"
-                className="w-full h-96 rounded-2xl shadow-2xl"
+                className="w-96 h-80 rounded-2xl shadow-2xl"
               />
               <div className="absolute -top-4 -right-4 bg-green-500 text-white p-3 rounded-full shadow-lg animate-bounce">
                 <Leaf className="h-6 w-6" />
               </div>
             </div>
 
-            <div className="absolute -top-12 -left-9 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-white/50 hidden sm:block">
+            <div className="flex absolute -top-12 -left-6 bg-white/90 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-white/50 sm:block">
               <div className="flex items-center space-x-3">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                 <span className="text-sm font-bold text-gray-700 ">Available to Book Now</span>
               </div>
             </div>
 
-            <div className="absolute -bottom-16 -right-8 bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/50 hidden sm:block">
+            <div className="absolute -bottom-16 -right-2 bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/50 hidden sm:block">
               <div className="text-center">
                 <div className="text-lg font-bold text-green-600">Affordable</div>
                 <div className="text-xs text-gray-600">Repairs, Assured</div>

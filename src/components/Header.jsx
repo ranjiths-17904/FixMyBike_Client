@@ -111,10 +111,10 @@ export default function Header({ onMenuClick }) {
     <header className={`bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-xl' : ''}`} role="navigation">
       {/* Main Header Bar */}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-        <div className="flex justify-between items-center h-20 sm:h-16 min-h-[5rem]">
+        <div className="flex justify-between items-center h-20 sm:h-16 min-h-[4rem]">
           {/* Logo */}
           <div className="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 cursor-pointer shrink-0" onClick={() => navigate('/')}> 
-            <img src={logo} alt="FixMyBike Logo" className="h-6 w-6 sm:h-8 sm:w-8 lg:h-10 lg:w-10 object-contain" />
+            <img src={logo} alt="FixMyBike Logo" className="h-10 w-10 sm:h-8 sm:w-8 lg:h-10 lg:w-10 object-contain" />
             <div className="min-w-0 hidden sm:block">
               <h1 className="text-sm sm:text-lg lg:text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent truncate">
                 FixMyBike

@@ -96,7 +96,7 @@ We offer competitive rates and quality service! 💰`;
 
 🏪 Main Shop: 
    123 Anna Salai, Bike Service Street, Coimbatore - 600001
-   📞 +91 98765 43210
+   📞 +91 73958 60211
 
 🏪 Branch: 
    456 Mount Road, Egmore, Chennai - 600008
@@ -118,23 +118,23 @@ Status updates include:
 
 You'll also receive SMS/email notifications at each step!
 
-Need immediate help? Call us: +91 98765 43210 📱`;
+Need immediate help? Call us: +91 7395860211📱`;
     } 
     else if (input.includes('contact') || input.includes('support')) {
-      return `📞 Contact FixMyBike Chennai:
+      return `📞 Contact FixMyBike Coimbatore:
 
-Customer Support: +91 98765 43210
-WhatsApp: +91 98765 43212
-Email: support@fixmybikechennai.com
+Customer Support: +91 7395860211
+WhatsApp: +91 7395860212
+Email: support@fixmybike.com
 
 🕒 Support Hours: 24/7
 
-📍 Address: 123 Anna Salai, T Nagar, Chennai - 600017
+📍 Address: 123 Bike Service Salai, Coimbatore - 600017
 
 We're here to help you anytime! 🤝`;
     }
     else if (input.includes('services') || input.includes('what do you do')) {
-      return `🚀 FixMyBike Chennai Services:
+      return `🚀 FixMyBike Coimbatore Services:
 
 🛁 Wash & Polish
    • Complete bike cleaning
@@ -268,9 +268,9 @@ Or type your question and I'll assist you! 🤖`;
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 z-40 w-96 h-96 bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col">
+        <div className="fixed bottom-20 right-4 z-30 w-80 h-80 bg-white rounded-xl shadow-xl border border-gray-200 flex flex-col">
           {/* Chat Header */}
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 rounded-t-2xl">
+          <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-3 rounded-t-2xl">
             <div className="flex items-center space-x-3">
               <div className="bg-white/20 p-2 rounded-full">
                 <Bot className="h-4 w-4" />
