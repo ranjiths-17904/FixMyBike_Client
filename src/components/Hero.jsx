@@ -49,7 +49,7 @@ export default function Hero({ onBookService }) {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-4">
               <div className="text-center">
                 <div className="bg-green-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Zap className="h-8 w-8 text-green-600" />
@@ -66,7 +66,7 @@ export default function Hero({ onBookService }) {
                 <div className="text-sm text-gray-600">Available</div>
               </div>
 
-              <div className="text-center">
+              <div className="text-center mb-6">
                 <div className="bg-emerald-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Leaf className="h-8 w-8 text-emerald-600" />
                 </div>
@@ -76,7 +76,7 @@ export default function Hero({ onBookService }) {
             </div>
           </div>
 
-          <div className="relative mb-20">
+          <div className="relative mb-16">
             <div className="relative z-10 bg-white/20 backdrop-blur-sm rounded-3xl p-8 border border-white/30">
               <img
                 src={image}

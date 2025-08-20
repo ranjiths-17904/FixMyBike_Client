@@ -122,7 +122,7 @@ export default function Header({ onMenuClick }) {
               <p className="text-xs text-gray-500 truncate">Save time. Ride better</p>
             </div>
             <div className="sm:hidden">
-              <h1 className="text-sm font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              <h1 className="text-lg ml-1 font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                 FixMyBike
               </h1>
             </div>
