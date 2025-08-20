@@ -95,7 +95,7 @@ export default function Hero({ onBookService }) {
               </div>
             </div>
 
-            <div className="absolute -bottom-16 -right-2 bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/50 hidden sm:block">
+            <div className="flex absolute -bottom-16 -right-2 bg-white/90 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/50 sm:block">
               <div className="text-center">
                 <div className="text-lg font-bold text-green-600">Affordable</div>
                 <div className="text-xs text-gray-600">Repairs, Assured</div>
