@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaSave, FaTimes, FaArrowLeft, FaCamera, FaUpload, FaDownload, FaShieldAlt, FaCalendarAlt, FaMotorcycle, FaClock } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit, FaSave, FaTimes, FaArrowLeft, FaCamera, FaUpload, FaDownload, FaShieldAlt, FaCalendarAlt, FaMotorcycle, FaClock, FaStore, FaBuilding } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import FloatingNotificationCard from '../../components/FloatingNotificationCard';
 import MainLogo from '../../assets/image/MainLogo.png';
@@ -12,6 +12,8 @@ const OwnerProfile = () => {
   const { user, updateProfile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [bookingStats, setBookingStats] = useState({
     total: 0,
     completed: 0,
@@ -26,6 +28,8 @@ const OwnerProfile = () => {
     city: user?.profile?.city || '',
     state: user?.profile?.state || '',
     pincode: user?.profile?.pincode || '',
+    shopName: user?.profile?.shopName || '',
+    shopAddress: user?.profile?.shopAddress || '',
     avatarUrl: user?.profile?.avatarUrl || ''
   });
 

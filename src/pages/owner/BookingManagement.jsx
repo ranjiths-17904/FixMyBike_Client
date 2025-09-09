@@ -36,13 +36,47 @@ const BookingManagement = () => {
     try {
       setLoading(true);
       const response = await api.get('/api/bookings');
-      setBookings(response.data.bookings || []);
+      let bookings = response.data.bookings || [];
+      
+      // Sort bookings by date in ascending order (oldest first)
+      bookings = bookings.sort((a, b) => {
+        const dateA = new Date(a.bookingDate || a.createdAt || 0);
+        const dateB = new Date(b.bookingDate || b.createdAt || 0);
+        return dateA - dateB;
+      });
+      
+      setBookings(bookings);
     } catch (error) {
       console.error('Error fetching bookings:', error);
       toast.error('Failed to fetch bookings');
     } finally {
       setLoading(false);
     }
+  };
+
+  // Helper function to format date properly
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Invalid Date';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid Date';
+      
+      return date.toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return 'Invalid Date';
+    }
+  };
+
+  // Helper function to format time
+  const formatTime = (timeString) => {
+    if (!timeString) return '';
+    return timeString;
   };
 
   const handleStatusUpdate = async (bookingId, newStatus, reason = '') => {
@@ -469,8 +503,8 @@ const BookingManagement = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{new Date(booking.bookingDate).toLocaleDateString()}</div>
-                          <div className="text-sm text-gray-500">{booking.preferredTime}</div>
+                          <div className="text-sm font-medium text-gray-900">{formatDate(booking.bookingDate)}</div>
+                          <div className="text-sm text-gray-500">{formatTime(booking.preferredTime)}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
